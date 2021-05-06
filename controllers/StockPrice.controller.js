@@ -80,7 +80,7 @@ exports.updateStock = async(req,res,next)=>{
         
         if(!stock) return res.status(404).json({success: false,message: 'error al actualizar'});
 
-        return  res.status(200).json({success: true,message: 'ok entro',data:stock})
+        return  res.status(200).json({success: true,message: 'ok actualizo',data:stock})
 
     } catch (error) {
         return res.status(500).json({
@@ -172,21 +172,10 @@ exports.getMasterSearch = async(req,res,next)=>{
         let seller=req.params.Seller      
         let startDate=req.params.start;
         let endDate=req.params.end;
-        const tomorrow = new Date(endDate)
-        tomorrow.setDate(tomorrow.getDate() + 1)
-        console.log(tomorrow);
-        endDate=tomorrow;
-        /*if((endDate != null || endDate != undefined || endDate != "")){
-            const tomorrow = new Date(startDate)
-            tomorrow.setDate(tomorrow.getDate() + 1)
+            const tomorrow = new Date(endDate);
+            tomorrow.setDate(tomorrow.getDate() + 1);
             console.log(tomorrow);
-            console.log("entro")
-            endDate = tomorrow
-            console.log(endDate)
-            
-        }
-        */
-        
+            endDate=tomorrow;       
         console.log(endDate)
         console.log(startDate!=null && endDate!=null)
         if(startDate!=null && endDate!=null){
@@ -293,6 +282,74 @@ exports.searchDateRange = async(req,res,next)=>{
 
         return res.status(200).json({success: true, stock: stockM})
 
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Problemas con el servidor conttacte al administrador'
+        });
+    }
+}
+exports.getMasterSearchSkuChannel = async(req,res,next)=>{
+    try {
+        const channel = req.params.Seller;
+        const sku = req.params.sku
+        const stock = await StockPriceModel.find({},{__v:0,Linio:0,Linio_1:0,Linio_2:0,ClaroShop:0,
+            ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0});
+
+            const stockL = await StockPriceModel.find(
+                {Linio:{$gte:1}},{createAt:1,Ventiapp:1,Ventiapp_1:1,Linio:1,Linio_1:1});
+                console.log("lenght Linio: "+stockL.length);
+
+            const stockCs = await StockPriceModel.find(
+                {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
+                    Shopify:0,Shopify_1:0,Shopify_2:0});
+                console.log("lenghtCs: "+stockCs.length);
+
+            const stockSp = await StockPriceModel.find(
+                {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
+                    ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0});
+            
+            console.log("x:"+seller);
+
+            console.log("lenght: "+stock.length);
+            console.log("sku : "+sku);
+            console.log("channel : "+channel);
+        switch(channel){
+            case 'MercadoLibre':    
+                let stockM =stock.filter(_stock =>(_stock.MercadoLibre!= 0 
+                    && _stock.MercadoLibre_1!= 0)&&(_stock.MercadoLibre!= null 
+                    && _stock.MercadoLibre_1!= null)&&(_stock.Ventiapp_1 === sku));
+                    console.log("lenght pp: "+stockM.length)
+                if(stockM.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                res.status(200).json({success:true,stockM });
+            break;
+            case 'Linio':
+                        let stockLinio =stockL.filter(_stockL =>_stockL.Ventiapp_1 === sku);
+                        console.log(stockLinio.length);
+                        if(stockL.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                        res.status(200).json({success:true,stockL});
+                break;
+            /*
+            
+                case 'ClaroShop':
+                    let stockC= stockCs.filter(_Cs =>(_Cs.ClaroShop!=0&&_Cs.ClaroShop_1!=0&& _Cs.ClaroShop_2!=0)
+                    &&(_Cs.ClaroShop!=null&&_Cs.ClaroShop_1!=null));
+                    console.log("2: "+stockC.length);
+                    if(stockC.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                    res.status(200).json({success:true,stockC});
+                    break;
+                case 'Shopify':
+                    let stockS= stockSp.filter(_Sp =>(_Sp.Shopify!=0&&_Sp.Shopify_1!=0&& _Sp.Shopify_2!=0)
+                    &&(_Sp.Shopify!=null&&_Sp.Shopify_1!=null));
+                    console.log("Sp: "+stockS.length);
+                    if(stockS.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                    res.status(200).json({success:true,stockS});
+                    break;
+                default:
+                    res.status(404).json({success:false,message:'lo siento no contamos con ese Sheller'})
+                    break;
+            */
+        }
     } catch (error) {
         return res.status(500).json({
             success: false,
