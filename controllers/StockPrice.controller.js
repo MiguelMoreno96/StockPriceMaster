@@ -96,18 +96,27 @@ exports.searchChannel = async(req,res,next)=>{
 
         const stock = await StockPriceModel.find({},{_id:0,__v:0,Linio:0,Linio_1:0,Linio_2:0,ClaroShop:0,
             ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0});
-            console.log("lenght: "+stock.length);
+
         const stockL = await StockPriceModel.find(
             {Linio:{$gte:1}},{_id:0,createAt:1,Ventiapp:1,Ventiapp_1:1,Linio:1,Linio_1:1});
-            console.log("lenght: "+stockL.length);
+
         const stockCs = await StockPriceModel.find(
             {},{_id:0,__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
                 Shopify:0,Shopify_1:0,Shopify_2:0});
-            console.log("lenghtCs: "+stockCs.length);
+
         const stockSp = await StockPriceModel.find(
             {},{_id:0,__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
                 ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0});
-        console.log("x:"+channel);
+
+        const stockEK = await StockPriceModel.find(
+            {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
+                ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0}
+        );
+        const stockWM = await StockPriceModel.find(
+            {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
+                ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0,
+                Elektra:0,Elektra_1:0}
+        );
 
         switch(channel){
             case 'MercadoLibre':    
@@ -124,17 +133,29 @@ exports.searchChannel = async(req,res,next)=>{
             case 'ClaroShop':
                 let stockC= stockCs.filter(_Cs =>(_Cs.ClaroShop!=0&&_Cs.ClaroShop_1!=0&& _Cs.ClaroShop_2!=0)
                 &&(_Cs.ClaroShop!=null&&_Cs.ClaroShop_1!=null));
-                console.log("2: "+stockC.length);
                 if(stockC.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
                 res.status(200).json({success:true,stockC});
                 break;
             case 'Shopify':
                 let stockS= stockSp.filter(_Sp =>(_Sp.Shopify!=0&&_Sp.Shopify_1!=0&& _Sp.Shopify_2!=0)
                 &&(_Sp.Shopify!=null&&_Sp.Shopify_1!=null));
-                console.log("Sp: "+stockS.length);
                 if(stockS.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
                 res.status(200).json({success:true,stockS});
                 break;
+            case 'Elektra':
+                let stockE = stockEK.filter(_Ek => (_Ek.Elektra != 0 && _Ek.Elektra_1 != 0) &&
+                                            (_Ek.Elektra != null && _Ek.Elektra_1 != null)/* &&
+                                            (_Ek.Ventiapp_1 === sku)*/);
+                if(stockE.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                res.status(200).json({success:true,stockE});
+            break;
+            case 'Walmart':
+                let stockWMkt =stockWM.filter(_Wm =>(_Wm.WalmartEDI != 0 && _Wm.WalmartEDI_1 != 0) &&
+                                                  (_Wm.WalmartEDI != null && _Wm.WalmartEDI_1 != null) 
+                                                   /*&&(_Wm.Ventiapp_1 === sku)*/);
+                if(stockWMkt.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                res.status(200).json({success:true,stockWMkt});
+            break;
         }
 
     } catch (error) {
@@ -249,6 +270,7 @@ exports.getMasterSearch = async(req,res,next)=>{
                     if(stockS.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
                     res.status(200).json({success:true,stockS});
                     break;
+                    
                 default:
                     res.status(404).json({success:false,message:'lo siento no contamos con ese Sheller'})
                     break;
@@ -298,18 +320,31 @@ exports.searchMasterChannelSku = async(req,res,next) => {
 
         const stock = await StockPriceModel.find({},{__v:0,Linio:0,Linio_1:0,Linio_2:0,ClaroShop:0,
             ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0});
-            console.log("lenght: "+stock.length);
+
         const stockL = await StockPriceModel.find(
             {Linio:{$gte:1}},{createAt:1,Ventiapp:1,Ventiapp_1:1,Linio:1,Linio_1:1});
-            console.log("lenght: "+stockL.length);
+
         const stockCs = await StockPriceModel.find(
             {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
                 Shopify:0,Shopify_1:0,Shopify_2:0});
-            console.log("lenghtCs: "+stockCs.length);
+
         const stockSp = await StockPriceModel.find(
             {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
                 ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0});
-        console.log("x:"+channel);
+        const stockEK = await StockPriceModel.find(
+            {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
+                ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0}
+        );
+        const stockEKM = await StockPriceModel.find(
+            {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
+                ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0}
+        );
+        const stockWMM = await StockPriceModel.find(
+            {},{__v:0,Linio:0,Linio_1:0,Linio_2:0,MercadoLibre:0,MercadoLibre_1:0,
+                ClaroShop:0,ClaroShop_1:0,ClaroShop_2:0,Shopify:0,Shopify_1:0,Shopify_2:0,
+                Elektra:0,Elektra_1:0}
+        );
+                console.log("x:"+channel);
 
         switch(channel){
             case 'MercadoLibre':    
@@ -340,25 +375,25 @@ exports.searchMasterChannelSku = async(req,res,next) => {
                 res.status(200).json({success:true,stockS});
                 break;
             case 'Elektra':
-                    let stockElk =stock.filter(_Ek =>(_Ek.Elektra != 0 
-                        && _Ek.Elektra_1 != 0)&&(_Ek.Elektra != null 
-                        && _Ek.Elektra_1 != null) &&(_Ek.Ventiapp_1 === sku));
-                        if(stockElk.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
-                        res.status(200).json({success:true,stockElk});
-                break;
+                let stockE = stockEKM.filter(_Ek => (_Ek.Elektra != 0 && _Ek.Elektra_1 != 0) &&
+                                                (_Ek.Elektra != null && _Ek.Elektra_1 != null) &&
+                                                (_Ek.Ventiapp_1 === sku));
+                if(stockE.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                res.status(200).json({success:true,stockE});
+            break;
             case 'Walmart':
-                    let stockWMkt =stock.filter(_Wm =>(_Wm.WalmartEDI != 0 
-                        && _Wm.WalmartEDI_1 != 0)&&(_Wm.WalmartEDI != null 
-                        && _Wm.WalmartEDI_1 != null) &&(_Wm.Ventiapp_1 === sku));
-                        if(stockWMkt.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
-                        res.status(200).json({success:true,stockWMkt});
-                break;
-                default:
-                    return res.status(404).json({
-                        success: false,
-                        message: 'Lo siento pero no tenenemos ese Sheller'
-                    });
-                break;
+                let stockWMkt =stockWMM.filter(_Wm =>(_Wm.WalmartEDI != 0 && _Wm.WalmartEDI_1 != 0) &&
+                                                    (_Wm.WalmartEDI != null && _Wm.WalmartEDI_1 != null) 
+                                                    &&(_Wm.Ventiapp_1 === sku));
+                if(stockWMkt.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                res.status(200).json({success:true,stockWMkt});
+            break;
+            default:
+                return res.status(404).json({
+                    success: false,
+                    message: 'Lo siento pero no tenenemos ese Sheller'
+                });
+            break;
         }
 
     } catch (error) {
