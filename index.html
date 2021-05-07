@@ -80,5 +80,25 @@
       }
     }
   </script>
+  <div>
+    <input type="date" id="dateStartMaster" >
+    <input type="date" id="dateEndMaster" >
+    <input type="text" id="skuMaster">
+    <input type="submit" onclick= SkuDateRangeMaster() >
+  </div>
+  <script>
+    async  function SkuDateRangeMaster(){
+      try {
+        const $startMaster = document.getElementById('dateStartMaster').value;
+        const $endMaster = document.getElementById('dateEndMaster').value;
+        const $sku = document.getElementById('skuMaster').value;
+        const request = await fetch(`http://localhost:5000/api/v1/stock/searchMasterSkuDateRange/${$startMaster}&${$endMaster}&${$sku}`);
+        const response = await request.json();
+        console.log(response);
+      } catch (error) {
+        console.log("Error: "+ error);
+      }
+    }
+  </script>
 </body>
 </html>

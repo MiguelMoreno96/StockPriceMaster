@@ -66,7 +66,7 @@ exports.searchSku = async (req,res,next) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: 'Problemas con el servidor conttacte al administrador'
+            message: 'Problemas con el servidor contacte al administrador'
         });
     }
 }
@@ -85,7 +85,7 @@ exports.updateStock = async(req,res,next)=>{
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: 'Problemas con el servidor conttacte al administrador'
+            message: 'Problemas con el servidor contacte al administrador'
         });
     }
 }
@@ -161,7 +161,7 @@ exports.searchChannel = async(req,res,next)=>{
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: 'Problemas con el servidor conttacte al administrador'
+            message: 'Problemas con el servidor contacte al administrador'
         });
     }
 }
@@ -183,7 +183,7 @@ exports.searchDate = async(req,res,next)=>{
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: 'Problemas con el servidor conttacte al administrador'
+            message: 'Problemas con el servidor contacte al administrador'
         });
     }
 }
@@ -272,7 +272,7 @@ exports.getMasterSearch = async(req,res,next)=>{
                     break;
                     
                 default:
-                    res.status(404).json({success:false,message:'lo siento no contamos con ese Sheller'})
+                    res.status(404).json({success:false,message:'Por el momento no contamos con ese Sheller'})
                     break;
             }
         }
@@ -280,7 +280,7 @@ exports.getMasterSearch = async(req,res,next)=>{
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: 'Problemas con el servidor conttacte al administrador'
+            message: 'Problemas con el servidor contacte al administrador'
         });
     }
 }
@@ -391,7 +391,7 @@ exports.searchMasterChannelSku = async(req,res,next) => {
             default:
                 return res.status(404).json({
                     success: false,
-                    message: 'Lo siento pero no tenenemos ese Sheller'
+                    message: 'Por el momento no contamos con ese Sheller'
                 });
             break;
         }
@@ -399,7 +399,7 @@ exports.searchMasterChannelSku = async(req,res,next) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: 'Problemas con el servidor conttacte al administrador'
+            message: 'Problemas con el servidor contacte al administrador'
         });
     }
 }
@@ -432,6 +432,9 @@ exports.searchMasterSkuDateRange =async(req,res,next) =>{
             return res.status(200).json({success: true, stock: stockM})
         }
     } catch (error) {
-        
+        return res.status(500).json({
+            success: false,
+            message: 'Problemas con el servidor contacte al administrador'
+        });
     }
 }
