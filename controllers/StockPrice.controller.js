@@ -211,8 +211,8 @@ exports.getMasterSearch = async(req,res,next)=>{
 
             let stockM =stock.filter(_stock =>Date.parse(_stock.createAt)>= startDate && Date.parse(_stock.createAt)<=endDate);
             
-            if(stockM.length<0)return res.status(400).json({
-                success:false,message: 'fecha no existe en este rango'})
+            if(stockM.length<1)return res.status(400).json({
+                success:false,message: 'No hay carga en ese rango de fecha'})
 
             return res.status(200).json({success: true, stock: stockM})
         }
@@ -249,25 +249,25 @@ exports.getMasterSearch = async(req,res,next)=>{
                     let stockM =stock.filter(_stock =>(_stock.MercadoLibre!= 0 
                         && _stock.MercadoLibre_1!= 0)&&(_stock.MercadoLibre!= null 
                         && _stock.MercadoLibre_1!= null));
-                    if(stockM.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                    if(stockM.length<1){res.status(400).json({success:false,message:'No se encontro el canal'})}
                     res.status(200).json({success:true,stockM });
                 break;
                 case 'Linio':
-                        if(stockL.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                        if(stockL.length<1){res.status(400).json({success:false,message:'No se encontro el canal'})}
                         res.status(200).json({success:true,stockL });
                 break;
                 case 'ClaroShop':
                     let stockC= stockCs.filter(_Cs =>(_Cs.ClaroShop!=0&&_Cs.ClaroShop_1!=0&& _Cs.ClaroShop_2!=0)
                     &&(_Cs.ClaroShop!=null&&_Cs.ClaroShop_1!=null));
                     console.log("2: "+stockC.length);
-                    if(stockC.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                    if(stockC.length<1){res.status(400).json({success:false,message:'No se encontro el canal'})}
                     res.status(200).json({success:true,stockC});
                     break;
                 case 'Shopify':
                     let stockS= stockSp.filter(_Sp =>(_Sp.Shopify!=0&&_Sp.Shopify_1!=0&& _Sp.Shopify_2!=0)
                     &&(_Sp.Shopify!=null&&_Sp.Shopify_1!=null));
                     console.log("Sp: "+stockS.length);
-                    if(stockS.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                    if(stockS.length<1){res.status(400).json({success:false,message:'No se encontro el canal'})}
                     res.status(200).json({success:true,stockS});
                     break;
                     
@@ -301,7 +301,7 @@ exports.searchDateRange = async(req,res,next)=>{
         let stockM =stock.filter(_stock =>Date.parse(_stock.createAt)>= startDate && Date.parse(_stock.createAt)<=endDate);
         
         if(stockM.length<0)return res.status(400).json({
-            success:false,message: 'fecha no existe en este rango'})
+            success:false,message: 'No hay carga en este Rango de fecha'})
 
         return res.status(200).json({success: true, stock: stockM})
 
@@ -351,12 +351,12 @@ exports.searchMasterChannelSku = async(req,res,next) => {
                 let stockM =stock.filter(_stock =>(_stock.MercadoLibre != 0 
                     && _stock.MercadoLibre_1 != 0)&&(_stock.MercadoLibre != null 
                     && _stock.MercadoLibre_1 != null) && (_stock.Ventiapp_1 === sku));
-                if(stockM.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                if(stockM.length<1){res.status(400).json({success:false,message:'No se encontro carga con ese sku'})}
                 res.status(200).json({success:true,stockM });
             break;
             case 'Linio':
                 let stockLinio = stockL.filter(_stockL => _stockL.Ventiapp_1 === sku)
-                    if ( stockLinio.length<0 ) {res.status(400).json({success:false,message:'No se encontro el canal'})}
+                if(stockLinio.length<1){res.status(400).json({success:false,message:'No se encontro carga con ese sku'})}
                     res.status(200).json({success:true,stockLinio });
             break;
             case 'ClaroShop':
@@ -364,28 +364,28 @@ exports.searchMasterChannelSku = async(req,res,next) => {
                     _Cs =>(_Cs.ClaroShop!=0&&_Cs.ClaroShop_1!=0&& _Cs.ClaroShop_2!=0)
                     &&(_Cs.ClaroShop!=null&&_Cs.ClaroShop_1!=null && _Cs.Ventiapp_1 === sku));
                 console.log("CLaroShop:::: "+stockC.length);
-                if(stockC.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                if(stockC.length<1){res.status(400).json({success:false,message:'No se encontro carga con ese sku'})}
                 res.status(200).json({success:true,stockC});
                 break;
             case 'Shopify':
                 let stockS= stockSp.filter(_Sp => (_Sp.Shopify != 0 && _Sp.Shopify_1 != 0 && _Sp.Shopify_2 != 0)
                 && (_Sp.Shopify != null && _Sp.Shopify_1 != null) && (_Sp.Ventiapp_1 === sku));
                 console.log("Sp: "+stockS.length);
-                if(stockS.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                if(stockS.length<1){res.status(400).json({success:false,message:'No se encontro carga con ese sku'})}
                 res.status(200).json({success:true,stockS});
                 break;
             case 'Elektra':
                 let stockE = stockEKM.filter(_Ek => (_Ek.Elektra != 0 && _Ek.Elektra_1 != 0) &&
                                                 (_Ek.Elektra != null && _Ek.Elektra_1 != null) &&
                                                 (_Ek.Ventiapp_1 === sku));
-                if(stockE.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                if(stockE.length<1){res.status(400).json({success:false,message:'No se encontro carga con ese sku'})}
                 res.status(200).json({success:true,stockE});
             break;
             case 'Walmart':
                 let stockWMkt =stockWMM.filter(_Wm =>(_Wm.WalmartEDI != 0 && _Wm.WalmartEDI_1 != 0) &&
                                                     (_Wm.WalmartEDI != null && _Wm.WalmartEDI_1 != null) 
                                                     &&(_Wm.Ventiapp_1 === sku));
-                if(stockWMkt.length<0){res.status(400).json({success:false,message:'No se encontro el canal'})}
+                if(stockWMkt.length<1){res.status(400).json({success:false,message:'No se encontro carga con ese sku'})}
                 res.status(200).json({success:true,stockWMkt});
             break;
             default:
@@ -425,9 +425,9 @@ exports.searchMasterSkuDateRange =async(req,res,next) =>{
             console.log( "star: " + startDate + " end: " + endDate )
 
             let stockM = stock.filter(_stock => Date.parse(_stock.createAt) >= startDate && Date.parse(_stock.createAt) <= endDate);
-            
-            if(stockM.length<0) return res.status(400).json({
-                success:false,message: 'fecha no existe en este rango'})
+            console.log(" encontrados"+stockM.length)
+            if(stockM.length<1) return res.status(400).json({
+                success:false,message: 'No hay carga en este Rango de fecha'})
 
             return res.status(200).json({success: true, stock: stockM})
         }
@@ -436,5 +436,17 @@ exports.searchMasterSkuDateRange =async(req,res,next) =>{
             success: false,
             message: 'Problemas con el servidor contacte al administrador'
         });
+    }
+    
+    exports. getProductos = async(req,res,next) =>{
+        try {
+            const sku = req.params.sku;
+            
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Problemas con el servidor contacte al administrador'
+            }); 
+        }
     }
 }
