@@ -27,7 +27,6 @@ exports.createParnum = async (req,res,next) => {
 exports.createOneParnum = async (req,res,next) => {
     try {
         const newParnum = req.body;
-        console.log(req.body);
         let parnum= await ParnumModel.create(newParnum);
         
         if(!parnum){
@@ -97,7 +96,6 @@ exports.getOneParnumRegister = async (req,res,next) => {
 exports.getAllParnumRegister = async (req,res,next) => {
     try {
         const Register = await ParnumModel.find();
-        console.log(!Register)
         if (!Register) {return res.status(400).json({
                             success :false,
                             message: 'Error al cargar los registros'
@@ -115,6 +113,19 @@ exports.getAllParnumRegister = async (req,res,next) => {
     }
 }
 
-/*
-exports.putOneRegister = async (req, res, next) => {}
-*/
+
+exports.putOneRegister = async (req, res, next) => {
+    try {
+        const parnum = await ParnumModel.findByIdAndUpdate(req.params.id,{$set:req.body},{new:true, runValidators:true})
+        
+        if(!parnum) return res.status(404).json({success: false,message: 'error al actualizar'});
+
+        return  res.status(200).json({success: true,data:parnum})
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Problemas con el servidor contacte al administrador'
+        });
+    }
+}
