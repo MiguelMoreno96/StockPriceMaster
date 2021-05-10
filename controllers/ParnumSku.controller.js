@@ -22,9 +22,11 @@ exports.findAllinformationProduct = async ( req ,res ,next ) => {
                         message: 'Error al buscar el parnum'
                     });
                 }
-                arrayTemp.push({stocks,"Part": Part, "Description": Description});
+                stocks= {...stocks,Part: Part, "Description": Description}
+                arrayTemp.push(stocks);
 
             }
+
             return res.status(200).json({
                 success: true,
                 arrayTemp
