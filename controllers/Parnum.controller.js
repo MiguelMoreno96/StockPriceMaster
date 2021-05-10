@@ -129,3 +129,25 @@ exports.putOneRegister = async (req, res, next) => {
         });
     }
 }
+
+exports.getOneParnumRegisterBySku = async (req, res, next) => {
+   try {
+        const sku = req.params.sku;
+        const findSku = await ParnumModel.find({SKU_c:sku});
+        if(!findSku){
+            return res.status(400).json({
+                success:false,
+                message:'Error al buscar por Sku'
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            findSku
+        })
+   } catch (error) {
+        return res.status(500).json({
+        success: false,
+        message: 'Problemas con el servidor contacte al administrador'
+    });
+   }
+}

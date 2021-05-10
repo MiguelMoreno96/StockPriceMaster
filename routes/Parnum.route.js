@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const {createParnum, createOneParnum, getOneParnumRegisterById, getOneParnumRegister, getAllParnumRegister, putOneRegister } = require('../controllers/Parnum.controller')
+const {createParnum, createOneParnum, getOneParnumRegisterById, getOneParnumRegister, getAllParnumRegister, putOneRegister, getOneParnumRegisterBySku} = require('../controllers/Parnum.controller')
 
 
 
@@ -26,5 +26,6 @@ router.route('/findById/:id').get(getOneParnumRegisterById);
 router.route('/findByParnum/:parnum').get(getOneParnumRegister);
 router.route('/getAllRegister').get(getAllParnumRegister);
 router.route('/updateParnum/:id').put(putOneRegister);
+router.route('/findBySku/:sku').get(getOneParnumRegisterBySku);
 
 module.exports = router;
