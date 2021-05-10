@@ -73,9 +73,27 @@ exports.consultAllUsers = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
     try {
-        const user = await UserModel.findByIdAndUpdate(req.params.id,{$set:req.body},{new:true, runValidators:true})
+        const newDate = Date.now();
+        const user = await UserModel.findByIdAndUpdate(req.params.id,{$set:req.body, ModifyAt:newDate},{new:true, runValidators:true}) 
         
-        if(!user) return res.status(404).json({success: false,message: 'error al actualizar'});
+        if(!user) return res.status(404).json({success: false,message: 'Error al actualizar'});
+
+        return  res.status(200).json({success: true,data:user})
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Problemas con el servidor contacte al administrador'
+        });
+    }
+}
+
+exports.updateUserByEmal = async (req, res, next) => {
+    try {
+        const newDate = Date.now();
+        const user = await UserModel.findOneAndUpdate(req.params.email,{$set:req.body, ModifyAt:newDate},{new:true, runValidators:true}) 
+        
+        if(!user) return res.status(404).json({success: false,message: 'Error al actualizar'});
 
         return  res.status(200).json({success: true,data:user})
 
@@ -89,6 +107,29 @@ exports.updateUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
     try {
+        const user = await UserModel.findByIdAndDelete({_id:req.params.id})
+    if(!user){
+        return res.status(400).json({
+            success:false,
+            message: 'Error al eliminar el usuario'
+        })
+    }
+    return res.status(200).json({
+        success: true,
+        user
+    })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Problemas con el servidor contacte al administrador'
+        });
+    }
+
+}
+
+exports.deleteUserByEmail = async (req, res, next) => {
+    try {
+        console.log(req.params.email);
         const user = await UserModel.findOneAndDelete({Correo:req.params.email})
     if(!user){
         return res.status(400).json({
