@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const {createParnum, createOneParnum, getOneParnumRegisterById, getOneParnumRegister, getAllParnumRegister, putOneRegister, getOneParnumRegisterBySku} = require('../controllers/Parnum.controller')
-const {findAllinformationProduct} =require('../controllers/ParnumSku.controller')
+const {createParnum, createOneParnum, getOneParnumRegisterById, getOneParnumRegister, getAllParnumRegister, putOneRegister, getOneParnumRegisterBySku,findAllinformationProduct} = require('../controllers/Parnum.controller')
+//const {findAllinformationProduct} =require('../controllers/ParnumSku.controller')
 
 
 
