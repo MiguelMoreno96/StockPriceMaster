@@ -176,12 +176,24 @@ exports.findAllinformationProduct = async ( req ,res ,next ) => {
                     });
                 }
                 
-                stocks= {...[stocks],Part: Part, "Description": Description}
-                
-                arrayTemp.push(stocks);
+               
+                const {createAt, _id, Ventiapp, Ventiapp_1, MercadoLibre, MercadoLibre_1, ClaroShop, ClaroShop_1, Shopify, Shopify_1, Elektra,
+                        Elektra_1,
+                        WalmartEDI,
+                        WalmartEDI_1,
+                        Linio,
+                        Linio_1,
+                        Linio_2,} = stocks;
+                arrayTemp.push({createAt, _id, Ventiapp, Ventiapp_1, MercadoLibre, MercadoLibre_1, ClaroShop, ClaroShop_1, Shopify, Shopify_1,Elektra,
+                    Elektra_1,
+                    WalmartEDI,
+                    WalmartEDI_1
+                    ,Linio,
+                    Linio_1,
+                    Linio_2,Part: Part, "Description": Description});
 
             }
-            console.log(arrayTemp)
+            
             
             return res.status(200).json({
                 success: true,
