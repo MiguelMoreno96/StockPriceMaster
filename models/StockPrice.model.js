@@ -17,6 +17,10 @@ const StockPriceModel = new mongoose.Schema({
     Shopify: Number,
     Shopify_1: Number,
     Shopify_2: Number,
+    Elektra: Number,
+    Elektra_1: Number,
+    WalmartEDI:Number,
+    WalmartEDI_1:Number,
     createAt: {
         type: Date,
         default: Date.now()

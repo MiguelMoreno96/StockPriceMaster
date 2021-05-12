@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const { createStockPrice, searchSku, updateStock, searchChannel, searchDate, searchDateRange, getindex, getMasterSearch} = require('../controllers/StockPrice.controller')
+const { createStockPrice, searchSku, updateStock, searchChannel, searchDate, searchDateRange, getindex, getMasterSearch, searchMasterChannelSku,searchMasterSkuDateRange} = require('../controllers/StockPrice.controller')
 
 
 
@@ -36,6 +36,8 @@ router.route('/DateRange/:start&:end').get(searchDateRange);
 
 router.route('/searchMaster/:start&:end').get(getMasterSearch);
 router.route('/searchMaster/:Seller').get(getMasterSearch);
+router.route('/searchMasterSkuSheller/:Seller&:sku').get(searchMasterChannelSku)
+router.route('/searchMasterSkuDateRange/:start&:end&:sku').get(searchMasterSkuDateRange)
 
 
 
