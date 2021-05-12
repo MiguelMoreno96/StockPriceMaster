@@ -20,6 +20,7 @@ const UserModel = new mongoose.Schema({
         required: [true, 'Se debe de tener un correo'],
         unique: true
     },
+
     password : {
         type: String,
         required: [true, 'Se debe de agregar una contraseña']
@@ -34,6 +35,9 @@ const UserModel = new mongoose.Schema({
         type: String,
         enum: ['Sistemas','Marketing','Comercial','Costos', 'Facturacion']
     },
+
+    
+
     CreateAt : {
         type : Date,
         default : Date.now()
