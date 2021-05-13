@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const {createParnum, createOneParnum, getOneParnumRegisterById, getOneParnumRegister, getAllParnumRegister, putOneRegister, getOneParnumRegisterBySku,findAllinformationProduct} = require('../controllers/Parnum.controller')
+const {createParnum, createOneParnum, getOneParnumRegisterById, getOneParnumRegister, getAllParnumRegister, putOneRegister, getOneParnumRegisterBySku,findAllinformationProduct,findAllinformationProductDate} = require('../controllers/Parnum.controller')
 //const {findAllinformationProduct} =require('../controllers/ParnumSku.controller')
 
 
@@ -32,4 +32,5 @@ router.route('/findBySku/:sku').get(getOneParnumRegisterBySku);
 /*------------------------------------------------------*/
 
 router.route('/FindProductSkuParnum/:sku').get(findAllinformationProduct);
+router.route('/FindProductSkuParnumDate/:start&:end&:sku').get(findAllinformationProductDate);
 module.exports = router;

@@ -18,9 +18,9 @@ exports.register = async(req,res,next) => {
             rol: req.body.rol,
             departamento: req.body.departamento
         }
-
-        const user = await User.create();
-        if(!user) throw res.status(400).json({
+        console.log(req.body)
+        const user = await User.create(newUser);
+        if(!user) return res.status(400).json({
             success: false,
             message: `Error no se pudo registrar el usuario: ${req.body.nombre}`
         })
@@ -43,30 +43,30 @@ exports.register = async(req,res,next) => {
 //@access Public
 
 exports.login = async(req,res,next) => {
-    const { email, password } = req.body;
+    const { correo, password } = req.body;
 
-    if (!email || !password) {
+    if (!correo || !password) {
         return res.status(404).json({
             message: 'Porfavor de proveer un email o un password'
         })
     }
 
-    const user = await User.findOne({ correo: email });
-
+    const user = await User.findOne({ correo: correo });
+    console.log(user)
     if (!user) {
-        return es.status(404).json({
+        return res.status(404).json({
             message: 'Error de credenciales'
         }) ;
     } 
-
-    if(!bcrypt.compareSync(password, usarioBD.password)) {
+    
+    if(!bcrypt.compareSync(password, user.password)) {
         return res.status(400).json({
             err: {message: 'La contraseña es incorrecta'}
         })
     }
 
     let token = jwt.sign({
-        user: usarioBD
+        user: user
     }, process.env.SEED, {expiresIn: process.env.CADUCIDAD_TOKEN});
 
     return res.status(200).json({

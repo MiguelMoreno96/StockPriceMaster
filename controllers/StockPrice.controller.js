@@ -1,4 +1,5 @@
 const StockPriceModel = require('../models/StockPrice.model');
+const ParnumModel = require('../models/Parnum.model');
 const path = require('path');
 const fs = require('fs');
 const xlsx = require('xlsx');
@@ -416,20 +417,25 @@ exports.searchMasterSkuDateRange =async(req,res,next) =>{
         console.log(startDate);
         console.log(endDate);
         const stock = await StockPriceModel.find({ Ventiapp_1: sku });
-        if(startDate != null && endDate != null){
-            console.log( "fecha de inicio desde master:" + startDate)
-            console.log( "fecha de fin desde master: " + endDate)
-            startDate = Date.parse( startDate );
-            endDate = Date.parse( endDate );
-            
-            console.log( "star: " + startDate + " end: " + endDate )
+        if(!stock){
+            return res.status(400).json({success: false, message: 'no encontramos ese Sku'})
+        }
+        else {
+            if(startDate != null && endDate != null){
+                startDate = Date.parse( startDate );
+                endDate = Date.parse( endDate );
 
-            let stockM = stock.filter(_stock => Date.parse(_stock.createAt) >= startDate && Date.parse(_stock.createAt) <= endDate);
-            console.log(" encontrados"+stockM.length)
-            if(stockM.length<1) return res.status(400).json({
-                success:false,message: 'No hay carga en este Rango de fecha'})
-
-            return res.status(200).json({success: true, stock: stockM})
+                let stockM = stock.filter(_stock => Date.parse(_stock.createAt) >= startDate && Date.parse(_stock.createAt) <= endDate);
+                console.log(" encontrados"+stockM.length)
+                
+                if(stockM.length<1) return res.status(400).json({
+                    success:false,message: 'No hay carga en este Rango de fecha'})
+                else{
+                    return res.status(200).json({success: true, stock: stockM})
+                    
+                }
+                
+            }
         }
     } catch (error) {
         return res.status(500).json({
@@ -441,7 +447,7 @@ exports.searchMasterSkuDateRange =async(req,res,next) =>{
     exports. getProductos = async(req,res,next) =>{
         try {
             const sku = req.params.sku;
-            
+
         } catch (error) {
             return res.status(500).json({
                 success: false,
@@ -450,3 +456,4 @@ exports.searchMasterSkuDateRange =async(req,res,next) =>{
         }
     }
 }
+

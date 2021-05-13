@@ -207,3 +207,72 @@ exports.findAllinformationProduct = async ( req ,res ,next ) => {
         });
     }
 }
+
+exports.findAllinformationProductDate = async ( req ,res ,next ) => {
+    try {
+        const product = await (await StockPriceModel.find({Ventiapp_1:req.params.sku},{__v:0}));
+        const arrayTemp = [];
+        let startDate = req.params.start;
+        let endDate = req.params.end;
+        const tomorrow = new Date(endDate)
+        tomorrow.setDate( tomorrow.getDate() + 1 )
+        endDate = tomorrow;
+
+        if(!product){
+            return res.status(400).json({
+                success: false,
+                message: 'Error al buscar el producto'
+            });
+        }
+        else{
+            for(stocks of product){
+                const sku =stocks.Ventiapp_1                
+                const [{Part,Description}] =await ParnumModel.find({SKU_c:sku},{_id:0,SKU_c:0,PrecioWeb:0,__v: 0});
+
+                if(!Part){
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Error al buscar el parnum'
+                    });
+                }
+                
+               
+                const {createAt, _id, Ventiapp, Ventiapp_1, MercadoLibre, MercadoLibre_1, ClaroShop, ClaroShop_1, Shopify, Shopify_1, Elektra,
+                        Elektra_1,
+                        WalmartEDI,
+                        WalmartEDI_1,
+                        Linio,
+                        Linio_1,
+                        Linio_2,} = stocks;
+                arrayTemp.push({createAt, _id, Ventiapp, Ventiapp_1, MercadoLibre, MercadoLibre_1, ClaroShop, ClaroShop_1, Shopify, Shopify_1,Elektra,
+                    Elektra_1,
+                    WalmartEDI,
+                    WalmartEDI_1
+                    ,Linio,
+                    Linio_1,
+                    Linio_2,Part: Part, "Description": Description});
+
+            }
+            if(startDate != null && endDate != null){
+                console.log("entro a la fecha con valor")
+                startDate = Date.parse( startDate );
+                endDate = Date.parse( endDate );
+
+                let stockM = arrayTemp.filter(_stock => Date.parse(_stock.createAt) >= startDate && Date.parse(_stock.createAt) <= endDate);
+                console.log(" encontrados"+stockM.length)
+                
+                if(stockM.length<1) return res.status(400).json({
+                    success:false,message: 'No hay carga en este Rango de fecha'})
+                else{
+                    return res.status(200).json({success: true, stock: stockM})
+                    
+                }
+            }
+        }
+    } catch ( error ) {
+        return res.status(500).json({
+            success: false,
+            message: 'Problemas con el servidor, contacte al administrador'
+        });
+    }
+}

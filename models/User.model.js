@@ -3,25 +3,25 @@ const mongoose = require('mongoose');
 
 
 const UserModel = new mongoose.Schema({
-    nombre : {
+    nombre: {
         type: String,
         required: [true, 'Se necesita de un nombre'],
         trim: true
     },
 
-    apellido_paterno : {
+    apellido_paterno: {
         type: String,
         required: [true, 'Se necesita de un apellido paterno'] 
     },
     apellido_materno : String,
     edad : Number,
-    correo :{
+    correo:{
         type: String,
         required: [true, 'Se debe de tener un correo'],
         unique: true
     },
 
-    password : {
+    password: {
         type: String,
         required: [true, 'Se debe de agregar una contraseña']
     },
@@ -38,11 +38,11 @@ const UserModel = new mongoose.Schema({
 
     
 
-    CreateAt : {
+    CreateAt: {
         type : Date,
         default : Date.now()
     },
-    ModifyAt : {
+    ModifyAt: {
         type : Date,
         default: Date.now()
     }
