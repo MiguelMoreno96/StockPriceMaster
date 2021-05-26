@@ -12,6 +12,7 @@ exports.getindex = async(req,res,next) => {
 exports.getAllStockPrice = async (req,res,next) => {
     try {
         const stock = await StockPriceModel.find();
+        console.log("stock:" + stock.length);
         if(!stock) return res.status(400).json({
             success: false,
             message: 'No se pudo traer los stock'
